@@ -10,13 +10,23 @@ interface CategoryFilterProps {
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterProps) => {
   const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   const handleImageLoad = () => {
     setImageLoading(false);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoading(false);
+    setImageError(true);
   };
 
   const selectedCategoryData = categories.find(cat => cat.id === selectedCategory) || 
     (selectedCategory === 'all' ? { name: "All Products", image: categories[0].image } : categories[0]);
+
+  // Fallback image if the original one fails to load
+  const fallbackImage = "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9";
 
   return (
     <div className="mb-8">
@@ -26,12 +36,12 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterPr
             <Skeleton className="absolute inset-0 w-full h-full" />
           )}
           <img 
-            src={selectedCategoryData.image} 
+            src={imageError ? fallbackImage : selectedCategoryData.image} 
             alt={selectedCategoryData.name}
             className="w-full h-full object-cover"
             onLoad={handleImageLoad}
+            onError={handleImageError}
             style={{ opacity: imageLoading ? 0 : 1 }}
-            onError={() => setImageLoading(false)}
           />
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
             <h2 className="text-white text-2xl md:text-3xl font-bold">
