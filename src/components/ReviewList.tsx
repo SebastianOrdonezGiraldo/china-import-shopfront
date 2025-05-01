@@ -2,18 +2,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { Review } from '../data/products';
 import StarRating from './StarRating';
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ReviewListProps {
   productId: number;
 }
 
 const fetchReviews = async (productId: number): Promise<Review[]> => {
-  // En un entorno real, esta URL apuntaría a tu servidor PHP
-  const response = await fetch(`/api/reviews?productId=${productId}`);
-  if (!response.ok) {
-    throw new Error('Error al cargar las reseñas');
+  try {
+    // En un entorno real, esta URL apuntaría a tu servidor PHP
+    const response = await fetch(`/api/reviews?productId=${productId}`);
+    
+    if (!response.ok) {
+      throw new Error('Error al cargar las reseñas');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    throw error;
   }
-  return response.json();
 };
 
 const ReviewList = ({ productId }: ReviewListProps) => {
@@ -24,8 +32,16 @@ const ReviewList = ({ productId }: ReviewListProps) => {
 
   if (isLoading) {
     return (
-      <div className="text-center py-8 bg-gray-50 rounded-lg">
-        <p className="text-gray-500">Cargando reseñas...</p>
+      <div className="space-y-6">
+        {[1, 2, 3].map((item) => (
+          <div key={item} className="bg-white p-4 rounded-lg border border-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <Skeleton className="h-16 w-full mt-2" />
+          </div>
+        ))}
       </div>
     );
   }
