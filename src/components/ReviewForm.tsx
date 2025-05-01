@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useToast } from '../hooks/use-toast';
 import StarRating from './StarRating';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ReviewFormProps {
   productId: number;
@@ -11,16 +12,18 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState('');
   const [city, setCity] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation
     if (rating === 0) {
       toast({
         title: "Error",
-        description: "Please select a rating.",
+        description: "Por favor selecciona una calificación.",
         variant: "destructive",
       });
       return;
@@ -29,7 +32,7 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
     if (text.trim() === '') {
       toast({
         title: "Error",
-        description: "Please enter a review text.",
+        description: "Por favor escribe el texto de tu reseña.",
         variant: "destructive",
       });
       return;
@@ -38,39 +41,71 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
     if (city.trim() === '') {
       toast({
         title: "Error",
-        description: "Please enter your city.",
+        description: "Por favor ingresa tu ciudad.",
         variant: "destructive",
       });
       return;
     }
 
-    // In a real app, we'd send this to the server
-    console.log('Review submitted:', { productId, rating, text, city });
-    
-    // Display success message
-    toast({
-      title: "Review Submitted",
-      description: "Thank you for your feedback!",
-    });
-    
-    // Reset form
-    setRating(0);
-    setText('');
-    setCity('');
+    setIsSubmitting(true);
+
+    try {
+      // En un entorno real, esta URL apuntaría a tu servidor PHP
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId,
+          rating,
+          text,
+          city
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al enviar la reseña');
+      }
+
+      // Mostrar mensaje de éxito
+      toast({
+        title: "¡Reseña enviada!",
+        description: "Gracias por tu opinión.",
+      });
+      
+      // Actualizar la caché de react-query para que se recarguen las reseñas
+      queryClient.invalidateQueries({ queryKey: ['reviews', productId] });
+      
+      // Reset form
+      setRating(0);
+      setText('');
+      setCity('');
+    } catch (error) {
+      console.error('Error al enviar la reseña:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "No se pudo enviar la reseña. Intenta de nuevo más tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-gray-200">
-      <h3 className="text-xl font-semibold mb-4">Write a Review</h3>
+      <h3 className="text-xl font-semibold mb-4">Escribe una Reseña</h3>
       
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Your Rating</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Tu Calificación</label>
         <StarRating rating={rating} setRating={setRating} editable={true} />
       </div>
       
       <div className="mb-4">
         <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-1">
-          Your Review
+          Tu Reseña
         </label>
         <textarea
           id="review-text"
@@ -78,13 +113,13 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          placeholder="What did you like or dislike about this product?"
+          placeholder="¿Qué te gustó o no te gustó de este producto?"
         ></textarea>
       </div>
       
       <div className="mb-6">
         <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-          Your City
+          Tu Ciudad
         </label>
         <input
           type="text"
@@ -92,15 +127,16 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          placeholder="Enter your city"
+          placeholder="Ingresa tu ciudad"
         />
       </div>
       
       <button 
         type="submit"
-        className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-md transition-colors"
+        disabled={isSubmitting}
+        className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Submit Review
+        {isSubmitting ? "Enviando..." : "Enviar Reseña"}
       </button>
     </form>
   );

@@ -1,16 +1,47 @@
 
+import { useQuery } from '@tanstack/react-query';
 import { Review } from '../data/products';
 import StarRating from './StarRating';
 
 interface ReviewListProps {
-  reviews: Review[];
+  productId: number;
 }
 
-const ReviewList = ({ reviews }: ReviewListProps) => {
-  if (reviews.length === 0) {
+const fetchReviews = async (productId: number): Promise<Review[]> => {
+  // En un entorno real, esta URL apuntaría a tu servidor PHP
+  const response = await fetch(`/api/reviews?productId=${productId}`);
+  if (!response.ok) {
+    throw new Error('Error al cargar las reseñas');
+  }
+  return response.json();
+};
+
+const ReviewList = ({ productId }: ReviewListProps) => {
+  const { data: reviews, isLoading, error } = useQuery({
+    queryKey: ['reviews', productId],
+    queryFn: () => fetchReviews(productId),
+  });
+
+  if (isLoading) {
     return (
       <div className="text-center py-8 bg-gray-50 rounded-lg">
-        <p className="text-gray-500">No reviews yet. Be the first to leave a review!</p>
+        <p className="text-gray-500">Cargando reseñas...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8 bg-gray-50 rounded-lg">
+        <p className="text-red-500">Error al cargar las reseñas. Por favor, intenta de nuevo más tarde.</p>
+      </div>
+    );
+  }
+
+  if (!reviews || reviews.length === 0) {
+    return (
+      <div className="text-center py-8 bg-gray-50 rounded-lg">
+        <p className="text-gray-500">No hay reseñas aún. ¡Sé el primero en dejar una reseña!</p>
       </div>
     );
   }
