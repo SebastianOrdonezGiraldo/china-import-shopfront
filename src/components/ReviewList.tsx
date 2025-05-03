@@ -1,6 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { Review } from '../data/products';
+import { Review, reviews as localReviews } from '../data/products';
 import StarRating from './StarRating';
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -9,19 +9,14 @@ interface ReviewListProps {
 }
 
 const fetchReviews = async (productId: number): Promise<Review[]> => {
-  try {
-    // En un entorno real, esta URL apuntaría a tu servidor PHP
-    const response = await fetch(`/api/reviews?productId=${productId}`);
-    
-    if (!response.ok) {
-      throw new Error('Error al cargar las reseñas');
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    throw error;
-  }
+  // Instead of fetching from an API, we'll use our local data
+  return new Promise((resolve) => {
+    // Simulate network delay
+    setTimeout(() => {
+      const filteredReviews = localReviews.filter(review => review.productId === productId);
+      resolve(filteredReviews);
+    }, 500);
+  });
 };
 
 const ReviewList = ({ productId }: ReviewListProps) => {

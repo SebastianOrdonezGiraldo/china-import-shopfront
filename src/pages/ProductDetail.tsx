@@ -1,4 +1,3 @@
-
 import { useContext, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { products } from '../data/products';
@@ -11,6 +10,13 @@ import ReviewForm from '../components/ReviewForm';
 import { Button } from "@/components/ui/button";
 import { CartContext } from '../contexts/CartContext';
 import { useToast } from '../hooks/use-toast';
+
+// Helper function to extract YouTube video ID
+const getYoutubeVideoId = (url: string): string | null => {
+  const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,6 +48,10 @@ const ProductDetail = () => {
   
   const handleAddToCart = () => {
     addToCart(product, quantity);
+    toast({
+      title: "Producto añadido",
+      description: `${product.name} ha sido añadido a tu carrito.`,
+    });
   };
   
   const handleBuyNow = () => {
@@ -53,6 +63,9 @@ const ProductDetail = () => {
   const handleQuantityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setQuantity(parseInt(e.target.value));
   };
+
+  // Get YouTube video ID if available
+  const videoId = product.videoUrl ? getYoutubeVideoId(product.videoUrl) : null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -123,14 +136,24 @@ const ProductDetail = () => {
         {product.videoUrl && (
           <div className="bg-white rounded-lg shadow-md p-6 mt-8">
             <h2 className="text-xl font-semibold mb-4">Video del Producto</h2>
-            <div className="aspect-w-16 aspect-h-9">
+            {videoId ? (
+              <div className="w-full aspect-w-16 aspect-h-9 relative rounded-lg overflow-hidden">
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title={`Video de ${product.name}`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                ></iframe>
+              </div>
+            ) : (
               <div className="w-full h-0 pt-[56.25%] bg-gray-100 relative rounded-lg flex items-center justify-center">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-gray-500">El reproductor de video se mostraría aquí</p>
+                  <p className="text-gray-500">No se puede cargar el video</p>
                   <p className="text-sm text-gray-400 absolute bottom-4">URL del Video: {product.videoUrl}</p>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
         

@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { useToast } from '../hooks/use-toast';
 import StarRating from './StarRating';
 import { useQueryClient } from '@tanstack/react-query';
+import { reviews } from '../data/products';
 
 interface ReviewFormProps {
   productId: number;
@@ -50,24 +50,21 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
     setIsSubmitting(true);
 
     try {
-      // En un entorno real, esta URL apuntaría a tu servidor PHP
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          rating,
-          text,
-          city
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al enviar la reseña');
-      }
+      // Simulate API call with a timeout
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Create new review object (in a real app, this would be saved to a database)
+      const newReview = {
+        id: reviews.length + 1,
+        productId,
+        text,
+        rating,
+        city,
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      // In a real app, this would be done server-side
+      reviews.push(newReview);
 
       // Mostrar mensaje de éxito
       toast({
