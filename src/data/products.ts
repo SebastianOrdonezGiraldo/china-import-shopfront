@@ -39,9 +39,9 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1590658268037-6bf12165a8df",
       "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f37",
-      "https://images.unsplash.com/photo-1656313826909-1cb0534d922c"
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb"
     ],
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/watch?v=ipvYYzSRRIY", // Earbuds review
     likes: 145,
     dislikes: 12
   },
@@ -56,6 +56,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1555663823-21fc0e3f2206",
       "https://images.unsplash.com/photo-1592503913762-e4db31030bbd"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=Fu1LW3n65ZE", // LED strip lights demo
     likes: 87,
     dislikes: 5
   },
@@ -70,6 +71,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1620147461831-a97b99ade1d3",
       "https://images.unsplash.com/photo-1620736462395-656e61051072"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=qFGDFxkj-7w", // Silk pajamas
     likes: 210,
     dislikes: 8
   },
@@ -84,6 +86,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1534882406296-b13d421c2468",
       "https://images.unsplash.com/photo-1491933367339-d869a4dcc137"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=pbzVAQPXNYE", // Desk lamp review
     likes: 56,
     dislikes: 3
   },
@@ -98,7 +101,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1527977966376-1c8408f9f108",
       "https://images.unsplash.com/photo-1508614589041-895b88991e3e"
     ],
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/watch?v=RwO6K-lJYOI", // Mini drone footage
     likes: 98,
     dislikes: 12
   },
@@ -113,6 +116,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1556228841-a3c527e24560",
       "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=GtNYjK8LNT8", // Korean skincare routine
     likes: 175,
     dislikes: 4
   },
@@ -127,6 +131,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1581244277943-fe4a9c777189",
       "https://images.unsplash.com/photo-1602143407151-7111542de6e8"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=1MU1L06aAOg", // Collapsible bottle review
     likes: 62,
     dislikes: 7
   },
@@ -141,6 +146,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1594409855476-29909f35c73c",
       "https://images.unsplash.com/photo-1592990774541-a5e0d49d1c66"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=bZrBHdoQiRE", // Plant monitor demo
     likes: 85,
     dislikes: 6
   },
@@ -155,7 +161,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1589003077984-894e133dabab",
       "https://images.unsplash.com/photo-1618623266812-f5c9c4434f63"
     ],
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/watch?v=W2lqQVEjzhs", // Bluetooth speaker review
     likes: 112,
     dislikes: 9
   },
@@ -170,6 +176,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1587654780291-39c9404d746b",
       "https://images.unsplash.com/photo-1560859251-17a0dfe5cba0"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=LZAx9F4qX0k", // Magnetic building blocks
     likes: 146,
     dislikes: 2
   },
@@ -184,6 +191,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1518611012118-696072aa579a",
       "https://images.unsplash.com/photo-1516526995003-435ccce2be97"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=PCoHQk_5izk", // Yoga mat review
     likes: 89,
     dislikes: 5
   },
@@ -198,6 +206,7 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633",
       "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
     ],
+    videoUrl: "https://www.youtube.com/watch?v=2YagsQB_R8E", // Oversized hoodie fashion
     likes: 203,
     dislikes: 15
   }
