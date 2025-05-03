@@ -1,15 +1,23 @@
 
+import { useContext, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { products } from '../data/products';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import LikeDislikeButtons from '../components/LikeDislikeButtons';
 import ProductGallery from '../components/ProductGallery';
 import ReviewList from '../components/ReviewList';
 import ReviewForm from '../components/ReviewForm';
+import { Button } from "@/components/ui/button";
+import { CartContext } from '../contexts/CartContext';
+import { useToast } from '../hooks/use-toast';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const productId = parseInt(id || '0');
+  const { addToCart } = useContext(CartContext);
+  const { toast } = useToast();
+  const [quantity, setQuantity] = useState(1);
   
   const product = products.find(p => p.id === productId);
   
@@ -27,21 +35,41 @@ const ProductDetail = () => {
             Volver al Inicio
           </Link>
         </div>
+        <Footer />
       </div>
     );
   }
+  
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+  };
+  
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    // Navigate to checkout
+    window.location.href = '/checkout';
+  };
+  
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuantity(parseInt(e.target.value));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-primary mb-6 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-          Volver a Productos
-        </Link>
+        <div className="text-sm breadcrumbs text-gray-500 mb-6">
+          <ul className="flex space-x-2">
+            <li><Link to="/" className="hover:text-primary">Inicio</Link></li>
+            <li className="before:content-['/'] before:mr-2">
+              <Link to={`/categories/${product.category}`} className="hover:text-primary">
+                {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+              </Link>
+            </li>
+            <li className="before:content-['/'] before:mr-2">{product.name}</li>
+          </ul>
+        </div>
         
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -59,11 +87,33 @@ const ProductDetail = () => {
                 <p className="text-gray-600">{product.description}</p>
               </div>
               
-              <button className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-md transition-colors mb-4">
+              <div className="mb-6">
+                <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                  Cantidad
+                </label>
+                <select
+                  id="quantity"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  className="w-full sm:w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                    <option key={num} value={num}>{num}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <button 
+                onClick={handleAddToCart}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-md transition-colors mb-4"
+              >
                 Añadir al Carrito
               </button>
               
-              <button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium py-3 px-4 rounded-md transition-colors">
+              <button 
+                onClick={handleBuyNow}
+                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium py-3 px-4 rounded-md transition-colors"
+              >
                 Comprar Ahora
               </button>
             </div>
@@ -97,11 +147,7 @@ const ProductDetail = () => {
         </div>
       </div>
       
-      <footer className="bg-white py-8 border-t mt-auto">
-        <div className="container mx-auto px-4 text-center text-gray-500">
-          <p>&copy; 2025 ChiImport. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

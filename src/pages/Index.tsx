@@ -4,6 +4,7 @@ import { products } from '../data/products';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
+import Footer from '../components/Footer';
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -13,7 +14,7 @@ const Index = () => {
     : products.filter(product => product.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -30,16 +31,12 @@ const Index = () => {
         
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No products found in this category.</p>
+            <p className="text-gray-500 text-lg">No hay productos en esta categoría.</p>
           </div>
         )}
       </main>
       
-      <footer className="bg-white py-8 border-t">
-        <div className="container mx-auto px-4 text-center text-gray-500">
-          <p>&copy; 2025 ChiImport. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
