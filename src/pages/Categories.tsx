@@ -1,21 +1,11 @@
 
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '../data/products';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Skeleton } from "@/components/ui/skeleton";
+import ImageWithFallback from '../components/ImageWithFallback';
 
 const Categories = () => {
-  const [imagesLoading, setImagesLoading] = useState<{[key: string]: boolean}>({});
-  
-  const handleImageLoad = (categoryId: string) => {
-    setImagesLoading(prev => ({
-      ...prev,
-      [categoryId]: false
-    }));
-  };
-  
   // Skip the "all" category
   const displayCategories = categories.filter(category => category.id !== 'all');
 
@@ -42,15 +32,11 @@ const Categories = () => {
               className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="h-48 relative">
-                {(!imagesLoading[category.id] === false) && (
-                  <Skeleton className="absolute inset-0 w-full h-full" />
-                )}
-                <img
+                <ImageWithFallback
                   src={category.image}
                   alt={category.name}
-                  onLoad={() => handleImageLoad(category.id)}
-                  style={{ opacity: imagesLoading[category.id] === false ? 1 : 0 }}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  fallbackSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                   <h2 className="text-white text-xl md:text-2xl font-bold">

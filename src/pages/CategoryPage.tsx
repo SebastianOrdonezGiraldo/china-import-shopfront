@@ -5,6 +5,7 @@ import { products, categories } from '../data/products';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 const CategoryPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,10 +57,11 @@ const CategoryPage = () => {
           
           <div className="relative mb-6">
             <div className="h-40 w-full rounded-lg overflow-hidden">
-              <img 
-                src={category.image} 
+              <ImageWithFallback
+                src={category.image}
                 alt={category.name}
-                className="w-full h-full object-cover"
+                className="object-cover"
+                fallbackSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
               />
               <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                 <h1 className="text-white text-2xl md:text-3xl font-bold">

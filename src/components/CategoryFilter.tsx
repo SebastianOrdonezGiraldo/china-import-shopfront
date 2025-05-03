@@ -1,7 +1,6 @@
 
-import { useState } from 'react';
 import { categories } from '../data/products';
-import { Skeleton } from "@/components/ui/skeleton";
+import ImageWithFallback from './ImageWithFallback';
 
 interface CategoryFilterProps {
   selectedCategory: string;
@@ -9,39 +8,18 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterProps) => {
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
-
-  const handleImageLoad = () => {
-    setImageLoading(false);
-    setImageError(false);
-  };
-
-  const handleImageError = () => {
-    setImageLoading(false);
-    setImageError(true);
-  };
-
   const selectedCategoryData = categories.find(cat => cat.id === selectedCategory) || 
     (selectedCategory === 'all' ? { name: "All Products", image: categories[0].image } : categories[0]);
-
-  // Fallback image if the original one fails to load
-  const fallbackImage = "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9";
 
   return (
     <div className="mb-8">
       <div className="relative mb-6">
         <div className="h-40 w-full rounded-lg overflow-hidden">
-          {imageLoading && (
-            <Skeleton className="absolute inset-0 w-full h-full" />
-          )}
-          <img 
-            src={imageError ? fallbackImage : selectedCategoryData.image} 
+          <ImageWithFallback
+            src={selectedCategoryData.image}
             alt={selectedCategoryData.name}
-            className="w-full h-full object-cover"
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            style={{ opacity: imageLoading ? 0 : 1 }}
+            className="object-cover"
+            fallbackSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
           />
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
             <h2 className="text-white text-2xl md:text-3xl font-bold">

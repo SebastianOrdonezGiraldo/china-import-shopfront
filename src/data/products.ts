@@ -1,4 +1,3 @@
-
 export interface Product {
   id: number;
   name: string;
@@ -24,8 +23,8 @@ export const categories = [
   { id: 'all', name: 'All Products', image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9' },
   { id: 'electronics', name: 'Electronics', image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03' },
   { id: 'clothing', name: 'Clothing', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b' },
-  { id: 'home', name: 'Home & Garden', image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04' },
-  { id: 'toys', name: 'Toys', image: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1' },
+  { id: 'home', name: 'Home & Garden', image: 'https://images.unsplash.com/photo-1618219740975-d78978b11329' },
+  { id: 'toys', name: 'Toys', image: 'https://images.unsplash.com/photo-1535268647853-c62dc2d1f48d' },
   { id: 'beauty', name: 'Beauty', image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348' },
   { id: 'sports', name: 'Sports', image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b' }
 ];

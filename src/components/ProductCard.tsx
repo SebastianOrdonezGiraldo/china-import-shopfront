@@ -1,9 +1,8 @@
 
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../data/products';
 import LikeDislikeButtons from './LikeDislikeButtons';
-import { Skeleton } from "@/components/ui/skeleton";
+import ImageWithFallback from './ImageWithFallback';
 
 interface ProductCardProps {
   product: Product;
@@ -11,25 +10,16 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { id, name, price, images, likes, dislikes } = product;
-  const [imageLoading, setImageLoading] = useState(true);
-
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
       <Link to={`/product/${id}`} className="block">
         <div className="h-48 overflow-hidden relative">
-          {imageLoading && (
-            <Skeleton className="absolute inset-0 w-full h-full" />
-          )}
-          <img 
-            src={images[0]} 
-            alt={name} 
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            onLoad={handleImageLoad}
-            style={{ opacity: imageLoading ? 0 : 1 }}
+          <ImageWithFallback
+            src={images[0]}
+            alt={name}
+            className="object-cover transition-transform duration-300 hover:scale-105"
+            fallbackSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
           />
         </div>
         <div className="p-4">

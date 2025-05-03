@@ -1,9 +1,8 @@
 
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Plus, Minus } from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
 import { Product } from '../data/products';
+import ImageWithFallback from './ImageWithFallback';
 
 interface CartItemProps {
   product: Product;
@@ -13,12 +12,6 @@ interface CartItemProps {
 }
 
 const CartItem = ({ product, quantity, onUpdateQuantity, onRemove }: CartItemProps) => {
-  const [imageLoading, setImageLoading] = useState(true);
-  
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
-  
   const handleIncrement = () => {
     onUpdateQuantity(product.id, quantity + 1);
   };
@@ -32,15 +25,12 @@ const CartItem = ({ product, quantity, onUpdateQuantity, onRemove }: CartItemPro
   return (
     <div className="flex items-center py-4 border-b last:border-b-0">
       <div className="relative h-16 w-16 flex-shrink-0">
-        {imageLoading && (
-          <Skeleton className="absolute inset-0 w-full h-full" />
-        )}
-        <img 
-          src={product.images[0]} 
-          alt={product.name} 
-          className="w-full h-full object-cover rounded"
-          onLoad={handleImageLoad}
-          style={{ opacity: imageLoading ? 0 : 1 }}
+        <ImageWithFallback
+          src={product.images[0]}
+          alt={product.name}
+          className="object-cover rounded"
+          fallbackSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          skeletonClassName="rounded"
         />
       </div>
       
